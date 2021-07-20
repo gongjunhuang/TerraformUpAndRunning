@@ -1,0 +1,16 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+   name: csi-disk-efficiency
+provisioner: antcloud-csi
+parameters:
+    failure-domain.beta.kubernetes.io/zone: CN-SHANGHAI
+    failure-domain.beta.kubernetes.io/region: CN-SHANGHAI-B
+    fsType: "ext4"
+    storage_type: "cloud_disk" # Allowed enum: cloud_disk, cloud_nas
+    type: "cloud_ssd"
+    readOnly: "false"
+    serviceId: "8814fddf-5be7-4f8a-862c-f4a57c25a0b4-aliyun-disk-service-id"
+    planId: "02b41c80-915f-43cd-a574-e9cd446f13ea-aliyun-disk-plan-id"
+reclaimPolicy: Retain # Allowed enum: Delete, Retain
+volumeBindingMode: Immediate # Allowed enum: Immediate, WaitForFirstConsumer

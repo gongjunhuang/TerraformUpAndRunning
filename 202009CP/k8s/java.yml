@@ -1,0 +1,29 @@
+# pod-虚拟机；容器-进程
+apiVersion: v1
+kind: Pod
+metadata:
+  name: java-web2
+spec:
+  # 所有initcontainer类型的容器，都会比spec.containers定义的用户容器先启动
+  # sidecar，启动一个辅助容器，完成一些独立于主进程之外的工作
+  initContainers:
+  - image: sample:v2
+    name: war
+    command: ["cp", "/sample.war", "/app"]
+    volumeMounts:
+    - mountPath: /app
+      name: app-volume
+
+  containers:
+  - image: tomcat:7.0
+    name: tomcate
+    command: ["sh", "-c","/root/apache-tomcat-7.0.42-v2/bin/start.sh"]
+    volumeMounts:
+    - mountPath: /root/apache-tomcat-7.0.42-v2/webapps
+      name: app-volume
+    ports:
+    - containerPort: 8080
+      hostPort: 8001
+  volumes:
+  - name: app-volume
+    emptyDir: {}
